@@ -29,3 +29,11 @@ export function removeLocalGame(id) {
 export function setLocalGames(games) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(games))
 }
+
+/** Merges partial updates into an existing game by id. */
+export function updateLocalGame(id, updates) {
+  const games = getLocalGames()
+  const updated = games.map(g => g.id === id ? { ...g, ...updates } : g)
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
+  return updated
+}

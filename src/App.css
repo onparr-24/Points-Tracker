@@ -154,13 +154,44 @@
   font-size: 1.05rem;
   font-weight: 500;
 }
+.points-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
 .player-points {
   font-size: 1.5rem;
   font-weight: 700;
-  min-width: 2rem;
-  text-align: right;
-  flex-shrink: 0;
+  min-width: 2.5rem;
+  text-align: center;
 }
+.points-btn {
+  width: 2rem;
+  height: 2rem;
+  min-width: 0;
+  padding: 0;
+  border-radius: 50%;
+  font-size: 1.25rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.8);
+  transition: background 0.15s, border-color 0.15s;
+}
+.points-btn:hover {
+  border-color: #6366f1;
+  background: rgba(99,102,241,0.2);
+  color: #fff;
+}
+.points-btn.plus { color: #86efac; border-color: rgba(134,239,172,0.3); }
+.points-btn.plus:hover { border-color: #86efac; background: rgba(134,239,172,0.15); }
+.points-btn.minus { color: #fca5a5; border-color: rgba(252,165,165,0.3); }
+.points-btn.minus:hover { border-color: #fca5a5; background: rgba(252,165,165,0.15); }
 
 /* Mobile adjustments */
 @media (max-width: 480px) {

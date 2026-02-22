@@ -1,6 +1,6 @@
-import { collection, getDocs, doc, getDoc, setDoc, updateDoc, query, where } from 'firebase/firestore'
+import { collection, getDocs, doc, getDoc, setDoc, updateDoc, increment, query, where } from 'firebase/firestore'
 import { db, auth, getUid } from './firebase'
-import { addLocalGame } from './localGames'
+import { addLocalGame, getLocalGames, updateLocalGame } from './localGames'
 
 const gamesCollection = () => collection(db, 'games')
 
@@ -81,4 +81,14 @@ export async function getGameByName(name) {
   // Only return the game if it belongs to the current user
   if (!uid || data.owner !== uid) return null
   return data
+}
+
+export async function updatePlayerPoints(gameId, pointsField, delta) {
+  const ref = doc(db, 'games', gameId)
+  await updateDoc(ref, { [pointsField]: increment(delta) })
+  // Sync localStorage
+  const game = getLocalGames().find(g => g.id === gameId)
+  if (game) {
+    updateLocalGame(gameId, { [pointsField]: (game[pointsField] ?? 0) + delta })
+  }
 }
