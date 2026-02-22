@@ -1,5 +1,5 @@
 import { collection, getDocs, doc, getDoc, setDoc, updateDoc, increment, query, where } from 'firebase/firestore'
-import { db, auth, getUid } from './firebase'
+import { db, auth, getUid, signInPromise } from './firebase'
 import { addLocalGame, getLocalGames, updateLocalGame } from './localGames'
 
 const gamesCollection = () => collection(db, 'games')
@@ -38,6 +38,8 @@ export async function createGame(gameName, player1Name) {
 export async function joinGame(gameName, playerName) {
   if (!gameName) throw new Error('gameName is required')
   if (!playerName) throw new Error('playerName is required')
+
+  await signInPromise
 
   const ref = doc(db, 'games', gameName)
   const snap = await getDoc(ref)
@@ -90,6 +92,7 @@ export async function getGameByName(name) {
 }
 
 export async function updatePlayerPoints(gameId, pointsField, delta) {
+  await signInPromise
   const ref = doc(db, 'games', gameId)
   await updateDoc(ref, { [pointsField]: increment(delta) })
   // Sync localStorage
@@ -100,6 +103,7 @@ export async function updatePlayerPoints(gameId, pointsField, delta) {
 }
 
 export async function fetchGame(gameId) {
+  await signInPromise
   const ref = doc(db, 'games', gameId)
   const snap = await getDoc(ref)
   if (!snap.exists()) return null
