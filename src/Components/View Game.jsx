@@ -49,17 +49,11 @@ export default function ViewGame({ open, onClose }) {
         ) : (
           <List sx={{ mt: 1 }}>
             {games.map((game, i) => {
-              const players = [game.player1, game.player2, game.player3, game.player4]
-                .filter(Boolean)
-                .join(', ')
               return (
                 <React.Fragment key={game.id}>
                   {i > 0 && <Divider />}
                   <ListItemButton onClick={() => handleSelect(game.id)}>
-                    <ListItemText
-                      primary={game.gameName || game.id}
-                      secondary={players || 'No players yet'}
-                    />
+                    <ListItemText primary={game.gameName || game.id} />
                   </ListItemButton>
                 </React.Fragment>
               )
