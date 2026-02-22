@@ -3,11 +3,13 @@ import '../App.css'
 import CreateGame from '../Components/Create Game'
 import JoinGame from '../Components/Join Game'
 import ViewGame from '../Components/View Game'
+import LeaveGame from '../Components/Leave Game'
 
 export default function Home() {
   const [createOpen, setCreateOpen] = useState(false)
   const [joinOpen, setJoinOpen] = useState(false)
   const [viewOpen, setViewOpen] = useState(false)
+  const [leaveOpen, setLeaveOpen] = useState(false)
 
   return (
     <div className="home-container">
@@ -19,10 +21,12 @@ export default function Home() {
         </button>
         <button onClick={() => setViewOpen(true)}>View Game</button>
         <button onClick={() => setJoinOpen(true)}>Join Game</button>
+        <button onClick={() => setLeaveOpen(true)}>Leave Game</button>
       </div>
       <CreateGame open={createOpen} onClose={() => setCreateOpen(false)} />
       <JoinGame open={joinOpen} onClose={() => setJoinOpen(false)} />
       <ViewGame open={viewOpen} onClose={() => setViewOpen(false)} />
+      <LeaveGame open={leaveOpen} onClose={() => setLeaveOpen(false)} />
     </div>
   )
 }
