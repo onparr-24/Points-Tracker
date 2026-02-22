@@ -15,6 +15,7 @@ const style = {
   width: '90vw',
   maxWidth: 400,
   bgcolor: 'background.paper',
+  color: 'rgba(0,0,0,0.87)',
   border: '2px solid #000',
   boxShadow: 24,
   p: 3,

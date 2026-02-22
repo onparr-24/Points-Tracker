@@ -1,12 +1,12 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import Modal from '@mui/material/Modal'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
-import { getLocalGames } from '../services/localGames'
-import { updatePlayerPoints } from '../services/games'
+import { getLocalGames, updateLocalGame } from '../services/localGames'
+import { updatePlayerPoints, fetchGame } from '../services/games'
 import '../App.css'
 
 const RANK_STYLES = [
@@ -37,10 +37,32 @@ export default function Game() {
 
   const found = getLocalGames().find(g => g.id === gameId)
   const [game, setGame] = useState(found || null)
+  const [loading, setLoading] = useState(true)
   const [modal, setModal] = useState({ open: false, playerName: '', pointsField: '', mode: 'add' })
   const [inputValue, setInputValue] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
+
+  // Fetch latest data from Firestore on mount to pick up new players / updated points
+  useEffect(() => {
+    fetchGame(gameId)
+      .then(fresh => {
+        if (fresh) {
+          setGame(fresh)
+          updateLocalGame(gameId, fresh)
+        }
+      })
+      .catch(() => {/* silently fall back to localStorage */})
+      .finally(() => setLoading(false))
+  }, [gameId])
+
+  if (loading && !game) {
+    return (
+      <div className="game-page">
+        <span style={{ color: 'rgba(255,255,255,0.5)' }}>Loading...</span>
+      </div>
+    )
+  }
 
   if (!game) {
     return (

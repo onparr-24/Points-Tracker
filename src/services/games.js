@@ -60,7 +60,13 @@ export async function joinGame(gameName, playerName) {
   await updateDoc(ref, { [freeSlot]: playerName })
 
   const updated = { id: gameName, ...data, [freeSlot]: playerName }
-  addLocalGame(updated)
+  // Use updateLocalGame so existing entries get refreshed, addLocalGame for new ones
+  const existing = getLocalGames().find(g => g.id === gameName)
+  if (existing) {
+    updateLocalGame(gameName, { [freeSlot]: playerName })
+  } else {
+    addLocalGame(updated)
+  }
   return { id: gameName, slot: slotIndex }
 }
 
@@ -91,4 +97,11 @@ export async function updatePlayerPoints(gameId, pointsField, delta) {
   if (game) {
     updateLocalGame(gameId, { [pointsField]: (game[pointsField] ?? 0) + delta })
   }
+}
+
+export async function fetchGame(gameId) {
+  const ref = doc(db, 'games', gameId)
+  const snap = await getDoc(ref)
+  if (!snap.exists()) return null
+  return { id: snap.id, ...snap.data() }
 }
